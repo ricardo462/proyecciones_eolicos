@@ -30,3 +30,7 @@ def get_day(x):
 def get_hour(x):
     numbers = re.findall('\d+', x)
     return int(numbers[3])
+
+def to_float(x):
+    numbers = x.split(',')
+    return float(f'{numbers[0]}.{numbers[1]}') if len(numbers) == 2 else float(numbers[0])
