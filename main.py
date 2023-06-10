@@ -1,4 +1,4 @@
-from utils import cwd
+from utils import *
 import os
 import pandas as pd
 
@@ -6,7 +6,22 @@ PATH = 'data'
 
 with cwd(PATH):
     files = os.listdir()
-    esc_a = pd.read_excel(files[0])
+    file = 'esc_a.xlsx'
+    esc_a = pd.read_excel(file, names=['year', 'bar', 'cost'])
+    reales = pd.read_csv('costos_marginales_2022.csv', names=['date', 'wrong_cost', 'cost'], skiprows=1, sep=';')
+    reales.drop('wrong_cost', inplace=True, axis=1)
 
-print(esc_a.head)
-    
+
+
+reales['year'] = reales['date'].apply(get_year)
+reales['month'] = reales['date'].apply(get_month)
+reales['day'] = reales['date'].apply(get_day)
+reales['hour'] = reales['date'].apply(get_hour)
+
+enero_01 = reales.loc[(reales['month'] == 1) & (reales['hour'] == 1)]
+
+print(enero_01)
+
+
+
+

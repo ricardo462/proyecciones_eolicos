@@ -1,5 +1,6 @@
 import os 
 from contextlib import contextmanager
+import re
 
 @contextmanager
 def cwd(path: str):
@@ -13,3 +14,19 @@ def cwd(path: str):
         yield
     finally:
         os.chdir(oldpwd)
+
+def get_year(x):
+    numbers = re.findall('\d+', x)
+    return int(numbers[0])
+
+def get_month(x):
+    numbers = re.findall('\d+', x)
+    return int(numbers[1])
+
+def get_day(x):
+    numbers = re.findall('\d+', x)
+    return int(numbers[2])
+
+def get_hour(x):
+    numbers = re.findall('\d+', x)
+    return int(numbers[3])
