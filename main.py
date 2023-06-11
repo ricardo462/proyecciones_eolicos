@@ -52,6 +52,7 @@ projected_mean_e = scenario_e.loc[(scenario_e['year'] == year) & (scenario_e['mo
 
 estimated_mean = means_per_month[projected_month]
 
+"""
 fig, ax = plt.subplots()
 ax.plot(typical_days[0], label='Día típico 2022')
 ax.plot(typical_days[0]/estimated_mean * projected_mean_a, label='Escenario A')
@@ -65,3 +66,30 @@ plt.xlabel('Hora')
 plt.ylabel('Costo marginal $\\frac{USD}{MWh}$')
 ax.legend()
 plt.show()
+"""
+
+# Exporting results 
+dates = []
+costs_projections = []
+for year in range(2024, 2045):
+    for month in range(1, 13):
+        projected_mean = scenario_a.loc[(scenario_a['year'] == year) & (scenario_a['month'] == month)]['cost'].values[0]
+        estimated_mean = means_per_month[month - 1]
+        typical_day = np.array(typical_days[month - 1])
+        costs_projections += list(typical_day/estimated_mean * projected_mean)
+        
+        for hour in range(1, 25):
+            dates.append(f'{year}-{month}-{hour}')
+
+dates = pd.Series(dates, name='dates')
+costs_projections = pd.Series(costs_projections, name='cost_predictions')
+
+
+
+print(dates)
+print(costs_projections)
+
+
+
+#projections = pd.DataFrame(['data', ])
+#print(scenario_a.cost.head())
