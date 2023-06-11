@@ -52,21 +52,21 @@ projected_mean_e = scenario_e.loc[(scenario_e['year'] == year) & (scenario_e['mo
 
 estimated_mean = means_per_month[projected_month]
 
-"""
+
 fig, ax = plt.subplots()
-ax.plot(typical_days[0], label='Día típico 2022')
-ax.plot(typical_days[0]/estimated_mean * projected_mean_a, label='Escenario A')
-ax.plot(typical_days[0]/estimated_mean * projected_mean_b, label='Escenario B')
-ax.plot(typical_days[0]/estimated_mean * projected_mean_c, label='Escenario C')
-ax.plot(typical_days[0]/estimated_mean * projected_mean_d, label='Escenario D')
-ax.plot(typical_days[0]/estimated_mean * projected_mean_e, label='Escenario E')
+ax.plot(typical_days[projected_month - 1], label='Día típico 2022')
+ax.plot(typical_days[projected_month - 1]/estimated_mean * projected_mean_a, label='Escenario A')
+ax.plot(typical_days[projected_month - 1]/estimated_mean * projected_mean_b, label='Escenario B')
+ax.plot(typical_days[projected_month - 1]/estimated_mean * projected_mean_c, label='Escenario C')
+ax.plot(typical_days[projected_month - 1]/estimated_mean * projected_mean_d, label='Escenario D')
+ax.plot(typical_days[projected_month - 1]/estimated_mean * projected_mean_e, label='Escenario E')
 n_month = get_month_from_number(projected_month)
-plt.title(f'Proyección del costo marginal del día típico de \n {n_month} {year} de versus día típico de {n_month} de \n2022 según proyección de escenario A')
+plt.title(f'Proyección del costo marginal del día típico de \n {n_month} {year} de versus día típico de {n_month} de \n2022 según las proyecciones')
 plt.xlabel('Hora')
 plt.ylabel('Costo marginal $\\frac{USD}{MWh}$')
 ax.legend()
 plt.show()
-"""
+
 
 # Exporting results 
 dates = []
