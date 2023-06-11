@@ -70,26 +70,37 @@ plt.show()
 
 # Exporting results 
 dates = []
-costs_projections = []
-for year in range(2024, 2045):
+costs_projections_a, costs_projections_b, costs_projections_c, costs_projections_d, costs_projections_e  = [], [], [], [], []
+for year in range(2024, 2044):
     for month in range(1, 13):
-        projected_mean = scenario_a.loc[(scenario_a['year'] == year) & (scenario_a['month'] == month)]['cost'].values[0]
         estimated_mean = means_per_month[month - 1]
         typical_day = np.array(typical_days[month - 1])
-        costs_projections += list(typical_day/estimated_mean * projected_mean)
+        costs_projections_a += get_costs_projections(scenario_a, typical_day, estimated_mean, year, month)
+        costs_projections_b += get_costs_projections(scenario_b, typical_day, estimated_mean, year, month)
+        costs_projections_c += get_costs_projections(scenario_c, typical_day, estimated_mean, year, month)
+        costs_projections_d += get_costs_projections(scenario_d, typical_day, estimated_mean, year, month)
+        costs_projections_e += get_costs_projections(scenario_e, typical_day, estimated_mean, year, month)
+        
         
         for hour in range(1, 25):
             dates.append(f'{year}-{month}-{hour}')
 
 dates = pd.Series(dates, name='dates')
-costs_projections = pd.Series(costs_projections, name='cost_predictions')
+costs_projections_a = pd.Series(costs_projections_a, name='cost_predictions')
+costs_projections_b = pd.Series(costs_projections_b, name='cost_predictions')
+costs_projections_c = pd.Series(costs_projections_c, name='cost_predictions')
+costs_projections_d = pd.Series(costs_projections_d, name='cost_predictions')
+costs_projections_e = pd.Series(costs_projections_e, name='cost_predictions')
 
 
 
-print(dates)
-print(costs_projections)
 
-
-
-#projections = pd.DataFrame(['data', ])
-#print(scenario_a.cost.head())
+projections = pd.DataFrame([])
+projections['dates'] = dates
+projections['escenario_a'] = costs_projections_a
+projections['escenario_b'] = costs_projections_b
+projections['escenario_c'] = costs_projections_c
+projections['escenario_d'] = costs_projections_d
+projections['escenario_e'] = costs_projections_e
+print(projections.head())
+projections.to_excel(os.sep.join(['data', 'proyecciones.xlsx']))
