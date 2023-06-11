@@ -34,3 +34,16 @@ def get_hour(x):
 def to_float(x):
     numbers = x.split(',')
     return float(f'{numbers[0]}.{numbers[1]}') if len(numbers) == 2 else float(numbers[0])
+
+def get_projected_year(x):
+    x = str(x)
+    data = x.split('-')
+    return int(data[0])
+
+def get_projected_month(x):
+    x = str(x)
+    data =x.split('-')
+    #months = {'enero':1, 'febrero':2 , 'marzo':3, 'abril':4, 'mayo':5, 'junio':6,
+    #          'julio':7, 'agosto':8, 'septiembre':9, 'octubre':10, 'noviembre':11, 'diciembre':12}
+    #return months[int(data[1])]
+    return int(data[1])
