@@ -4,26 +4,26 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-PATH = 'data'
+DATA_PATH = 'data'
+SCENARIO_FILE = 'esc_a.xlsx'
+SCENARIO_A_FILE = 'esc_a.xlsx'
+SCENARIO_B_FILE = 'esc_b.xlsx'
+SCENARIO_C_FILE = 'esc_c.xlsx'
+SCENARIO_D_FILE = 'esc_d.xlsx'
+SCENARIO_E_FILE = 'esc_e.xlsx'
+REAL_COSTS_FILE = 'costos_marginales_2022.csv'
 
-with cwd(PATH):
-    files = os.listdir()
-    file = 'esc_a.xlsx'
-    esc_a = pd.read_excel(file, names=['date', 'bar', 'cost'])
-    reales = pd.read_csv('costos_marginales_2022.csv', names=['date', 'wrong_cost', 'cost'], skiprows=1, sep=';')
-    reales['cost'] = reales['cost'].apply(to_float)
-    reales.drop('wrong_cost', inplace=True, axis=1)
+with cwd(DATA_PATH):    
+    scenario_a = get_scenario(SCENARIO_A_FILE)
+    scenario_b = get_scenario(SCENARIO_B_FILE)
+    scenario_c = get_scenario(SCENARIO_C_FILE)
+    scenario_d = get_scenario(SCENARIO_D_FILE)
+    scenario_e = get_scenario(SCENARIO_E_FILE)
 
-esc_a['year'] = esc_a['date'].apply(get_projected_year)
-esc_a['month'] = esc_a['date'].apply(get_projected_month)
+    reales = get_real_costs(REAL_COSTS_FILE)
+    
 
-
-reales['year'] = reales['date'].apply(get_year)
-reales['month'] = reales['date'].apply(get_month)
-reales['day'] = reales['date'].apply(get_day)
-reales['hour'] = reales['date'].apply(get_hour)
-
-#enero_01 = reales.loc[(reales['month'] == 1) & (reales['hour'] == 1)]
+# Calcular promedios 2022
 typical_days = []
 means_per_month = []
 for month in range(1, 13):
@@ -41,19 +41,26 @@ typical_days = np.array(typical_days)
 means_per_month = np.array(means_per_month)
 
 
-print(f'Largo de los días típicos: {typical_days.shape}')
-print(f'Largo de las medias por mes: {means_per_month.shape}')
+year = 2025
+projected_month = 3
 
-projected_mean = esc_a.loc[(esc_a['year'] == 2024) & (esc_a['month'] == 1)]['cost'].values[0]
-estimated_mean = means_per_month[0]
+projected_mean_a = scenario_a.loc[(scenario_a['year'] == year) & (scenario_a['month'] == projected_month)]['cost'].values[0]
+projected_mean_b = scenario_b.loc[(scenario_b['year'] == year) & (scenario_b['month'] == projected_month)]['cost'].values[0]
+projected_mean_c = scenario_c.loc[(scenario_c['year'] == year) & (scenario_c['month'] == projected_month)]['cost'].values[0]
+projected_mean_d = scenario_d.loc[(scenario_d['year'] == year) & (scenario_d['month'] == projected_month)]['cost'].values[0]
+projected_mean_e = scenario_e.loc[(scenario_e['year'] == year) & (scenario_e['month'] == projected_month)]['cost'].values[0]
 
-print(f'Projected mean: {projected_mean}, estimated mean: {estimated_mean}')
+estimated_mean = means_per_month[projected_month]
 
-# Plot a straight diagonal line with ticked style path
 fig, ax = plt.subplots()
 ax.plot(typical_days[0], label='Día típico 2022')
-ax.plot(typical_days[0]/estimated_mean * projected_mean, label='Proyectada')
-plt.title('Proyección del costo marginal del día típico de \n enero 2024 de versus día típico de enero de \n2022 según proyección de escenario A')
+ax.plot(typical_days[0]/estimated_mean * projected_mean_a, label='Escenario A')
+ax.plot(typical_days[0]/estimated_mean * projected_mean_b, label='Escenario B')
+ax.plot(typical_days[0]/estimated_mean * projected_mean_c, label='Escenario C')
+ax.plot(typical_days[0]/estimated_mean * projected_mean_d, label='Escenario D')
+ax.plot(typical_days[0]/estimated_mean * projected_mean_e, label='Escenario E')
+n_month = get_month_from_number(projected_month)
+plt.title(f'Proyección del costo marginal del día típico de \n {n_month} {year} de versus día típico de {n_month} de \n2022 según proyección de escenario A')
 plt.xlabel('Hora')
 plt.ylabel('Costo marginal $\\frac{USD}{MWh}$')
 ax.legend()
