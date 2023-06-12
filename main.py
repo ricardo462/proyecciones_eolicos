@@ -42,7 +42,7 @@ means_per_month = np.array(means_per_month)
 
 
 year = 2025
-projected_month = 3
+projected_month = 7
 
 projected_mean_a = scenario_a.loc[(scenario_a['year'] == year) & (scenario_a['month'] == projected_month)]['cost'].values[0]
 projected_mean_b = scenario_b.loc[(scenario_b['year'] == year) & (scenario_b['month'] == projected_month)]['cost'].values[0]
