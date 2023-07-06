@@ -31,7 +31,8 @@ for month in range(1, 13):
     means_per_month.append(costs_per_month['cost'].mean())
     typical_days_per_month = []
     for hour in range(1, 25):
-        costs_per_hour = reales[reales['hour'] == hour]
+        #costs_per_hour = reales[reales['hour'] == hour] Esta línea está mal :o
+        costs_per_hour = costs_per_month[costs_per_month['hour'] == hour]
         costs = costs_per_hour['cost'].mean() 
         typical_days_per_month.append(costs)
 
@@ -40,6 +41,16 @@ for month in range(1, 13):
 typical_days = np.array(typical_days)
 means_per_month = np.array(means_per_month)
 
+fig = plt.figure(figsize=(10,5))
+for idx, typical_day in enumerate(typical_days):
+    plt.plot(typical_day, label=get_month_from_number(idx + 1))
+
+plt.legend(loc='upper left', ncol=3)
+plt.xlabel('Hora')
+plt.ylabel('Costo Marginal $[\\frac{USD}{MWh}]$')
+plt.title('Día típico calculado para cada día del año 2022')
+plt.savefig(os.sep.join(['figures', 'dias_tipicos_2022.png']))
+plt.show()
 
 year = 2025
 
